@@ -13,6 +13,8 @@ $(function(){
 			hoverOnPause : true,
 			pauseOnHoverArea : $(this).parent(),
 			controlsArea : $(this).parent(), // TODO: sort out jquery-ification of custom property
+			controlsType : "next/prev",
+			animateFirstPageIn : false,
 			animateFrom : {
 				"opacity" : 1
 			},
@@ -32,30 +34,35 @@ $(function(){
 
 		var base = this,
 			pages = $(base).children(),
-			currentIndex = 0,
+			currentPageIndex = 0,
 			autoPlay = config.autoPlay,
 			transitionInProgress = false,
-			intervalId = setInterval(cyclePages, config.pageSpeed);
+			intervalId = setInterval(next, config.pageSpeed);
 
 		init();
 
 		function init() {
-			$(base).find('div:not(.active)').hide();
 
-			var parent = $(base).parent();
+			$(pages).hide();
 
-			config.controlsArea.append('<div class="ss-controls"><button class="ss-prev">Previous</button> <span class="ss-pagination"><span class="ss-current">1</span>/<span class="ss-total"></span></span> <button class="ss-next">Next</button></div>');
-			config.controlsArea.find('.ss-controls .ss-total').text(pages.length);
+			if (config.animateFirstPageIn) {
+				currentPageIndex = -1;
+				stepPages(1);
+			} else {
+				$($(pages)[0]).show();
+			}
+
+			setupControls();
 
 			if (config.autoPlay && config.hoverOnPause) {
 				config.pauseOnHoverArea.mouseover(function () {
-					autoPlay = false;
+					clearTimeout(intervalId);
 				});
 
 				// TODO: mouseout on children trigger this then an immediate mouseover.
 				config.pauseOnHoverArea.mouseout(function (event) {
 					// event.stopPropagation(); // Something like this
-					autoPlay = true;
+					intervalId = setInterval(next, config.pageSpeed);
 				});
 			}
 		}
@@ -68,12 +75,6 @@ $(function(){
 			changePage(-1);
 		}
 
-		function cyclePages() {
-			if (autoPlay) {
-				next();
-			}
-		}
-
 		function changePage(numberOfPages) {
 			if (!transitionInProgress) {
 				hidePages();
@@ -81,23 +82,33 @@ $(function(){
 			}
 		}
 
+		function jumpToPage(toPageIndex) {
+
+			if (toPageIndex === currentPageIndex) {
+				// Prevent navigating to the current page.
+			} else {
+				changePage(toPageIndex - currentPageIndex);
+			}
+		}
+
 		function stepPages(numberOfPages) {
 
-			currentIndex += numberOfPages;
+			currentPageIndex += numberOfPages;
 
-			if (currentIndex >= pages.length) {
-				currentIndex = 0;
-			} else if (currentIndex < 0) {
-				currentIndex = pages.length-1;
+			// Wrapping
+			if (currentPageIndex >= pages.length) {
+				currentPageIndex = 0;
+			} else if (currentPageIndex < 0) {
+				currentPageIndex = pages.length-1;
 			}
 
 			if (numberOfPages > 0) {
-				$(pages[currentIndex]).addClass('animate-left');
+				$(pages[currentPageIndex]).addClass('animate-left');
 			} else {
-				$(pages[currentIndex]).addClass('animate-right');
+				$(pages[currentPageIndex]).addClass('animate-right');
 			}
 
-			displayPage(pages[currentIndex]);
+			displayPage(pages[currentPageIndex]);
 		}
 
 		function hidePages() {
@@ -118,10 +129,12 @@ $(function(){
 
 			$(page).show();
 
-			//update page number
-			config.controlsArea.find('.ss-controls .ss-current').text(currentIndex + 1);
+			// Update page number or active navigation item.
+			config.controlsArea.find('.ss-controls .ss-current').text(currentPageIndex + 1);
+			$(base).find('.ss-pages li').removeClass('active');
+			$($(base).find('.ss-pages li')[currentPageIndex]).addClass('active');
 
-			animateChildren(pages[currentIndex]);
+			animateChildren(pages[currentPageIndex]);
 		}
 
 		function prepareChildren(children, container) {
@@ -166,7 +179,7 @@ $(function(){
 				};
 
 				if ($(child).hasClass('exclude')) {
-					$(child).animate(config.extraAnimateTo, "out");
+					$(child).delay(250).animate(config.extraAnimateTo, "out");
 				} else {
 					$.extend(true, config.animateTo, animationProperties);
 					$(child).animate(config.animateTo, "out");
@@ -183,13 +196,48 @@ $(function(){
 			}, config.stagger);
 		}
 
-		// next button
-		config.controlsArea.find('.ss-next').on('click', function() {
-			next();
-		});
-		// prev button
-		config.controlsArea.find('.ss-prev').on('click', function() {
-			previous();
-		});
+		function setupControls() {
+			switch (config.controlsType) {
+				case 'next/prev':
+					setupNextPrevControls();
+					break;
+				case 'itimised':
+					setupItemisedControls();
+				break;
+				default:
+					// No controls.
+				break;
+			}
+
+			function setupItemisedControls() {
+					config.controlsArea.append('<div class="ss-controls"><ol class="ss-pages"></ol></div>');
+
+					$(pages).each(function(index) {
+						$(".ss-pages").append('<li data-page-number="' + index +'" class="paginate' + (index + 1)  +'">'+ (index + 1) +'</li>');
+					});
+
+					config.controlsArea.find('.ss-pages li').on('click', function() {
+						jumpToPage($(this).data('page-number'));
+					});
+
+					$($(base).find('.ss-pages li')[0]).addClass("active");
+			}
+
+			function setupNextPrevControls() {
+				config.controlsArea.append('<div class="ss-controls"><button class="ss-prev">Previous</button> <span class="ss-pagination"><span class="ss-current">1</span>/<span class="ss-total"></span></span> <button class="ss-next">Next</button></div>');
+				config.controlsArea.find('.ss-controls .ss-total').text(pages.length);
+
+				// next button
+				config.controlsArea.find('.ss-next').on('click', function() {
+					next();
+				});
+
+				// prev button
+				config.controlsArea.find('.ss-prev').on('click', function() {
+					previous();
+				});
+			}
+
+		}
 	};
 }(jQuery));

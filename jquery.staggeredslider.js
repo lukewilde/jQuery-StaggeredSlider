@@ -15,18 +15,11 @@ $(function(){
 			controlsArea : $(this).parent(), // TODO: sort out jquery-ification of custom property
 			controlsType : "next/prev",
 			animateFirstPageIn : false,
-			animateFrom : {
-				"opacity" : 1
-			},
-			animateTo : {
-				"opacity" : 1
-			},
-			extraAnimateFrom : {
-				"opacity" : 0
-			},
-			extraAnimateTo : {
-				"opacity" : 1
-			}
+			animateFrom : {},
+			animateTo : {},
+			secondaryAnimateClass : 'secondary',
+			secondaryAnimateFrom : {},
+			secondaryAnimateTo : {}
 		};
 
 		// merge default global variables with custom variables, modifying 'config'
@@ -136,8 +129,8 @@ $(function(){
 			children.each(function() {
 
 
-				if ($(this).hasClass('exclude')) {
-					$(this).css(config.extraAnimateFrom);
+				if ($(this).hasClass(config.secondaryAnimateClass)) {
+					$(this).css(config.secondaryAnimateFrom);
 				} else {
 
 					// Setting dynamic property to maintain child margins.
@@ -171,7 +164,7 @@ $(function(){
 				};
 
 				if ($(child).hasClass('exclude')) {
-					$(child).delay(250).animate(config.extraAnimateTo, "out");
+					$(child).delay(250).animate(config.secondaryAnimateTo, "out");
 				} else {
 					$.extend(true, config.animateTo, animationProperties);
 					$(child).animate(config.animateTo, "out");

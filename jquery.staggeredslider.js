@@ -198,7 +198,7 @@ $(function(){
 				case 'next/prev':
 					setupNextPrevControls();
 					break;
-				case 'itimised':
+				case 'itemised':
 					setupPaginatedControls();
 				break;
 				case 'none':

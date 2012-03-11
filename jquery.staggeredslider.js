@@ -138,7 +138,7 @@ $(function(){
 					// Setting dynamic property to maintain child margins.
 					this['originalMargin'] = $(this).css('margin-left');
 
-					if ($(parent).hasClass('animate-left')) {
+					if ($($(this).parent()).hasClass('animate-left')) {
 						$(this).css({'margin-left' : marginWhenHidden + 'px'});
 					} else {
 						$(this).css({'margin-left' : '-' + marginWhenHidden + 'px'});

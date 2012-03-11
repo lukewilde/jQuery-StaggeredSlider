@@ -38,7 +38,7 @@ $(function(){
 
 		function init() {
 
-			prepairFirstPage();
+			preparePages();
 			setupControls();
 
 			if (config.autoPlay && config.hoverOnPause) {
@@ -183,7 +183,7 @@ $(function(){
 			}, config.stagger);
 		}
 
-		function prepairFirstPage() {
+		function preparePages() {
 			if (config.animateFirstPageIn) {
 				$(pages).hide();
 				currentPageIndex = -1;

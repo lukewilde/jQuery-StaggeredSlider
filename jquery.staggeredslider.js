@@ -43,15 +43,7 @@ $(function(){
 
 		function init() {
 
-			$(pages).hide();
-
-			if (config.animateFirstPageIn) {
-				currentPageIndex = -1;
-				stepPages(1);
-			} else {
-				$($(pages)[0]).show();
-			}
-
+			prepairFirstPage();
 			setupControls();
 
 			if (config.autoPlay && config.hoverOnPause) {
@@ -196,6 +188,16 @@ $(function(){
 			}, config.stagger);
 		}
 
+		function prepairFirstPage() {
+			if (config.animateFirstPageIn) {
+				$(pages).hide();
+				currentPageIndex = -1;
+				stepPages(1);
+			} else {
+				$(pages[0]).parent().children(':not(:first-child)').hide();
+			}
+		}
+
 		function setupControls() {
 			switch (config.controlsType) {
 				case 'next/prev':
@@ -204,6 +206,7 @@ $(function(){
 				case 'itimised':
 					setupItemisedControls();
 				break;
+				case 'none':
 				default:
 					// No controls.
 				break;

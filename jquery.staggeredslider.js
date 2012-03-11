@@ -208,18 +208,18 @@ $(function(){
 			}
 
 			function setupPaginatedControls() {
-					// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
-					config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
+				// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
+				config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
 
-					$(pages).each(function(index) {
-						$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
-					});
+				$(pages).each(function(index) {
+					$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
+				});
 
-					config.controlsArea.find('li').on('click', function() {
-						jumpToPage($(this).data('page-number'));
-					});
+				config.controlsArea.find('li').on('click', function() {
+					jumpToPage($(this).data('page-number'));
+				});
 
-					$($(parent).find('li')[0]).addClass("active");
+				$($(parent).find('li')[0]).addClass("active");
 			}
 
 			function setupNextPrevControls() {

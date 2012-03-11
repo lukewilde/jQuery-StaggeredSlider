@@ -189,7 +189,7 @@ $(function(){
 				currentPageIndex = -1;
 				stepPages(1);
 			} else {
-				$(pages[0]).parent().children(':not(:first-child)').hide();
+				$(pages[0]).siblings().hide();
 			}
 		}
 

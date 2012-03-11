@@ -118,8 +118,8 @@ $(function(){
 
 			// Update page number or active navigation item.
 			config.controlsArea.find('.ss-controls .ss-current').text(currentPageIndex + 1);
-			$(base).find('.ss-pages li').removeClass('active');
-			$($(base).find('.ss-pages li')[currentPageIndex]).addClass('active');
+			$(base).find('li').removeClass('active');
+			$($(base).find('li')[currentPageIndex]).addClass('active');
 
 			animateChildren(pages[currentPageIndex]);
 		}
@@ -209,17 +209,17 @@ $(function(){
 
 			function setupPaginatedControls() {
 					// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
-					config.controlsArea.append('<div class="ss-controls"><ol class="ss-pages"></ol></div>');
+					config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
 
 					$(pages).each(function(index) {
 						$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
 					});
 
-					config.controlsArea.find('.ss-pages li').on('click', function() {
+					config.controlsArea.find('li').on('click', function() {
 						jumpToPage($(this).data('page-number'));
 					});
 
-					$($(parent).find('.ss-pages li')[0]).addClass("active");
+					$($(parent).find('li')[0]).addClass("active");
 			}
 
 			function setupNextPrevControls() {

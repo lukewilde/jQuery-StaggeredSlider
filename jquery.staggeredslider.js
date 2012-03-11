@@ -25,7 +25,9 @@ $(function(){
 		// merge default global variables with custom variables, modifying 'config'
 		if (settings) $.extend(true, config, settings);
 
-		var base = this,
+		var
+			base = this,
+			parent = base.parent(),
 			pages = $(base).children(),
 			currentPageIndex = 0,
 			autoPlay = config.autoPlay,
@@ -136,7 +138,7 @@ $(function(){
 					// Setting dynamic property to maintain child margins.
 					this['originalMargin'] = $(this).css('margin-left');
 
-					if ($(this).parent().hasClass('animate-left')) {
+					if ($(parent).hasClass('animate-left')) {
 						$(this).css({'margin-left' : marginWhenHidden + 'px'});
 					} else {
 						$(this).css({'margin-left' : '-' + marginWhenHidden + 'px'});
@@ -197,7 +199,7 @@ $(function(){
 					setupNextPrevControls();
 					break;
 				case 'itimised':
-					setupItemisedControls();
+					setupPaginatedControls();
 				break;
 				case 'none':
 				default:
@@ -205,18 +207,19 @@ $(function(){
 				break;
 			}
 
-			function setupItemisedControls() {
+			function setupPaginatedControls() {
+					// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
 					config.controlsArea.append('<div class="ss-controls"><ol class="ss-pages"></ol></div>');
 
 					$(pages).each(function(index) {
-						$(".ss-pages").append('<li data-page-number="' + index +'" class="paginate' + (index + 1)  +'">'+ (index + 1) +'</li>');
+						$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
 					});
 
 					config.controlsArea.find('.ss-pages li').on('click', function() {
 						jumpToPage($(this).data('page-number'));
 					});
 
-					$($(base).find('.ss-pages li')[0]).addClass("active");
+					$($(parent).find('.ss-pages li')[0]).addClass("active");
 			}
 
 			function setupNextPrevControls() {

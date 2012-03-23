@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
 
 	$.fn.staggeredslider = function(settings) {
 
@@ -13,7 +13,7 @@ $(function(){
 			hoverOnPause : true,
 			pauseOnHoverArea : $(this).parent(),
 			controlsArea : $(this).parent(), // TODO: sort out jquery-ification of custom property
-			controlsType : "next/prev",
+			controlsType : 'next/prev',
 			animateFirstPageIn : false,
 			animateFrom : {},
 			animateTo : {},
@@ -23,7 +23,9 @@ $(function(){
 		};
 
 		// merge default global variables with custom variables, modifying 'config'
-		if (settings) $.extend(true, config, settings);
+		if (settings) {
+			$.extend(true, config, settings);
+		}
 
 		var
 			base = this,
@@ -89,6 +91,7 @@ $(function(){
 				currentPageIndex = pages.length-1;
 			}
 
+			// TODO: add option to invert.
 			if (numberOfPages > 0) {
 				$(pages[currentPageIndex]).addClass('animate-left');
 			} else {
@@ -166,17 +169,16 @@ $(function(){
 				};
 
 				if ($(child).hasClass('exclude')) {
-					$(child).delay(250).animate(config.secondaryAnimateTo, "out");
+					$(child).delay(250).animate(config.secondaryAnimateTo, 'out');
 				} else {
 					$.extend(true, config.animateTo, animationProperties);
-					$(child).animate(config.animateTo, "out");
+					$(child).animate(config.animateTo, 'out');
 				}
 
 				if (children.length - 1 === childIndex) {
 					clearTimeout(loopId);
 					transitionInProgress = false;
-					$(container).removeClass('animate-left');
-					$(container).removeClass('animate-right');
+					$(container).removeClass('animate-left animate-right');
 				}
 
 				childIndex += 1;
@@ -201,25 +203,23 @@ $(function(){
 				case 'itemised':
 					setupPaginatedControls();
 				break;
-				case 'none':
 				default:
 					// No controls.
 				break;
 			}
 
 			function setupPaginatedControls() {
-					// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
 					config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
 
 					$(pages).each(function(index) {
-						$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
+						$(parent).find('.ss-controls ol').append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
 					});
 
-					config.controlsArea.find('li').on('click', function() {
+					config.controlsArea.find('.ss-pages li').on('click', function() {
 						jumpToPage($(this).data('page-number'));
 					});
 
-					$($(parent).find('li')[0]).addClass("active");
+					$($(parent).find('.ss-pages li')[0]).addClass('active');
 			}
 
 			function setupNextPrevControls() {

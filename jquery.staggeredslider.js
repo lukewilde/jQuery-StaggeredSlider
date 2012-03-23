@@ -38,7 +38,7 @@ $(function(){
 
 		function init() {
 
-			preparePages();
+			prepairFirstPage();
 			setupControls();
 
 			if (config.autoPlay && config.hoverOnPause) {
@@ -183,7 +183,7 @@ $(function(){
 			}, config.stagger);
 		}
 
-		function preparePages() {
+		function prepairFirstPage() {
 			if (config.animateFirstPageIn) {
 				$(pages).hide();
 				currentPageIndex = -1;
@@ -206,36 +206,37 @@ $(function(){
 					// No controls.
 				break;
 			}
-		}
 
-		function setupPaginatedControls() {
-			// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
-			config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
+			function setupPaginatedControls() {
+					// config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
+					config.controlsArea.append('<div class="ss-controls"><ol></ol></div>');
 
-			$(pages).each(function(index) {
-				$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
-			});
+					$(pages).each(function(index) {
+						$(parent).find(".ss-controls ol").append('<li data-page-number="' + index +'" class="paginate' + (index + 1) +'">'+ (index + 1) +'</li>');
+					});
 
-			config.controlsArea.find('li').on('click', function() {
-				jumpToPage($(this).data('page-number'));
-			});
+					config.controlsArea.find('li').on('click', function() {
+						jumpToPage($(this).data('page-number'));
+					});
 
-			$($(parent).find('li')[0]).addClass("active");
-		}
+					$($(parent).find('li')[0]).addClass("active");
+			}
 
-		function setupNextPrevControls() {
-			config.controlsArea.append('<div class="ss-controls"><button class="ss-prev">Previous</button> <span class="ss-pagination"><span class="ss-current">1</span>/<span class="ss-total"></span></span> <button class="ss-next">Next</button></div>');
-			config.controlsArea.find('.ss-controls .ss-total').text(pages.length);
+			function setupNextPrevControls() {
+				config.controlsArea.append('<div class="ss-controls"><button class="ss-prev">Previous</button> <span class="ss-pagination"><span class="ss-current">1</span>/<span class="ss-total"></span></span> <button class="ss-next">Next</button></div>');
+				config.controlsArea.find('.ss-controls .ss-total').text(pages.length);
 
-			// next button
-			config.controlsArea.find('.ss-next').on('click', function() {
-				next();
-			});
+				// next button
+				config.controlsArea.find('.ss-next').on('click', function() {
+					next();
+				});
 
-			// prev button
-			config.controlsArea.find('.ss-prev').on('click', function() {
-				previous();
-			});
+				// prev button
+				config.controlsArea.find('.ss-prev').on('click', function() {
+					previous();
+				});
+			}
+
 		}
 	};
 }(jQuery));
